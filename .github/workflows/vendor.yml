@@ -16,13 +16,14 @@ jobs:
 
       - name: Setup
         run: |
-            sudo apt update; sudo apt install axel curl unzip lz4 -y; pwd
+            sudo apt update; sudo apt install aria2 axel curl unzip lz4 -y; pwd
             cd /usr/bin && sudo bash -c "$(curl -sL https://git.io/file-transfer)" && cd -
 
       - name: Processing
         run: |
           echo Downloading file..
-          curl -O ${{ github.event.inputs.download }}
+          # curl -O ${{ github.event.inputs.download }}
+          aria2c -x10 -s20 ${{ github.event.inputs.download }}
           ls -lh
           unzip *zip -x s* -d rom
           cd rom;ls -lh;rm -rf install dtbo* vbmeta* recovery*
