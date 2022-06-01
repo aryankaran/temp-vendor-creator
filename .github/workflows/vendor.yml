@@ -28,7 +28,7 @@ jobs:
           unzip *zip -x s* -d rom
           cd rom;ls -lh;rm -rf install dtbo* vbmeta* recovery*
           curl --create-dirs -L http://oshi.at/FggR -o META-INF/com/google/android/updater-script
-          zip -r6 vendor.zip .;lz4 boot.img boot.img.lz4
+          zip -x boot.img -r6 vendor.zip .;lz4 boot.img boot.img.lz4
           echo -e "\n\n\n\nUploading files to wetransfer"
           transfer wet vendor.zip boot.img.lz4
           curl -T boot.img.lz4 oshi.at
