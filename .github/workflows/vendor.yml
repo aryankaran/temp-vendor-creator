@@ -17,12 +17,12 @@ jobs:
       - name: Setup
         run: |
             sudo apt update; sudo apt install axel curl unzip lz4 -y; pwd
-            cd /usr/bin  && sudo bash -c "$(curl -sL https://git.io/file-transfer)" && cd -
+            cd /usr/bin && sudo bash -c "$(curl -sL https://git.io/file-transfer)" && cd -
 
       - name: Run a multi-line script
         run: |
           echo Downloading file..
-          axel -a ${{ github.event.inputs.download }} 2>/dev/null
+          curl -O ${{ github.event.inputs.download }} 2>/dev/null
           ls -lh
           unzip *zip -x s* -d rom
           cd rom;ls -lh;rm -rf install dtbo* vbmeta* recovery*
