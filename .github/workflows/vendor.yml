@@ -7,7 +7,7 @@ on:
         description: 'Rom link'
         required: true
 jobs:
-  unzip:
+  Extract-and-upload-vendor:
     runs-on: ubuntu-20.04
 
     steps:
