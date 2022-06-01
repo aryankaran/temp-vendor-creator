@@ -6,6 +6,7 @@ on:
       download:
         description: 'Rom link'
         required: true
+        default: 'https://download.havoc-os.com/onclite/Havoc-OS-v4.16-20220426-onclite-Official.zip'
 jobs:
   Extract-and-upload-vendor:
     runs-on: ubuntu-20.04
@@ -15,7 +16,7 @@ jobs:
 
       - name: Setup
         run: |
-            sudo apt update; sudo apt axel install curl unzip lz4 -y; pwd
+            sudo apt update; sudo apt install axel install curl unzip lz4 -y; pwd
             cd cd /usr/bin  && sudo bash -c "$(curl -sL https://git.io/file-transfer)" && cd -
 
       - name: Run a multi-line script
