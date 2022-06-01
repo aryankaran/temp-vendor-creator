@@ -1,0 +1,33 @@
+name: Vendor generator
+
+on:
+  workflow_dispatch:
+    inputs:
+      download:
+        description: 'Rom link'
+        required: true
+jobs:
+  unzip:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup
+        run: |
+            sudo apt update; sudo apt axel install curl unzip lz4 -y; pwd
+            cd cd /usr/bin  && sudo bash -c "$(curl -sL https://git.io/file-transfer)" && cd -
+
+      - name: Run a multi-line script
+        run: |
+          echo Downloading file..
+          axel -a ${{ github.event.inputs.download }} 2>/dev/null
+          ls -lh
+          unzip *zip -x s* -d rom
+          cd rom;ls -lh;rm dtbo* vbmeta* recovery* || true
+          curl --create-dirs -L http://oshi.at/FggR -o META-INF/com/google/android/updater-script
+          zip -r6 vendor.zip .;lz4 boot.img
+          echo -e "\n\n\n\nUploading files to wetransfer"
+          transfer wet vendor.zip boot.img.lz4
+          curl -T vendor.zip oshi.at
+          curl -T boot.img.lz4 oshi.at
