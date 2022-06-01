@@ -31,5 +31,4 @@ jobs:
           zip -r6 vendor.zip .;lz4 boot.img boot.img.lz4
           echo -e "\n\n\n\nUploading files to wetransfer"
           transfer wet vendor.zip boot.img.lz4
-          curl -T vendor.zip oshi.at
           curl -T boot.img.lz4 oshi.at
