@@ -22,7 +22,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo Downloading file..
-          curl -O ${{ github.event.inputs.download }} 2>/dev/null
+          curl -O ${{ github.event.inputs.download }}
           ls -lh
           unzip *zip -x s* -d rom
           cd rom;ls -lh;rm -rf install dtbo* vbmeta* recovery*
