@@ -1,7 +1,6 @@
 name: Vendor generator
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       download:
