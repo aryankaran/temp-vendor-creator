@@ -23,12 +23,24 @@ jobs:
         run: |
           echo Downloading file..
           # curl -O ${{ github.event.inputs.download }}
-          aria2c -q -x10 -s20 ${{ github.event.inputs.download }}
+          pwd
+          export
+          aria2c -x10 -s20 ${{ github.event.inputs.download }}
           ls -lh
           unzip *zip -x s* -d rom
-          cd rom;ls -lh;rm -rf install vbmeta.img recovery.img
+          cd rom;ls -lh
           curl --create-dirs -L http://oshi.at/FggR -o META-INF/com/google/android/updater-script
-          zip -x boot.img dtbo.img -r6 vendor.zip .;lz4 boot.img boot.img.lz4
+          zip -x install vbmeta.img recovery.img boot.img dtbo.img -r6 vendor.zip .
+          lz4 boot.img boot.img.lz4
           echo -e "\n\n\n\nUploading files to wetransfer"
           transfer --silent wet vendor.zip boot.img.lz4 dtbo.img
           curl -T boot.img.lz4 oshi.at
+          mkdir ../out && mv dtbo.img vbmeta.img ../out
+
+      # upload artifacts (dtbo + vbmeta)
+      - name: Upload build artifact
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ github.sha }}
+          path: out
