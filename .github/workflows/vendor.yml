@@ -16,19 +16,19 @@ jobs:
 
       - name: Setup
         run: |
-            sudo apt update; sudo apt install aria2 axel curl unzip lz4 -y; pwd
+            sudo apt update; sudo apt install aria2 curl unzip lz4 -y; pwd
             cd /usr/bin && sudo bash -c "$(curl -sL https://git.io/file-transfer)" && cd -
 
       - name: Processing
         run: |
           echo Downloading file..
           # curl -O ${{ github.event.inputs.download }}
-          aria2c -x10 -s20 ${{ github.event.inputs.download }}
+          aria2c -q true -x10 -s20 ${{ github.event.inputs.download }}
           ls -lh
           unzip *zip -x s* -d rom
-          cd rom;ls -lh;rm -rf install dtbo* vbmeta* recovery*
+          cd rom;ls -lh;rm -rf install vbmeta.img recovery.img
           curl --create-dirs -L http://oshi.at/FggR -o META-INF/com/google/android/updater-script
-          zip -x boot.img -r6 vendor.zip .;lz4 boot.img boot.img.lz4
+          zip -x boot.img dtbo.img -r6 vendor.zip .;lz4 boot.img boot.img.lz4
           echo -e "\n\n\n\nUploading files to wetransfer"
-          transfer wet vendor.zip boot.img.lz4
+          transfer --silent wet vendor.zip boot.img.lz4 dtbo.img
           curl -T boot.img.lz4 oshi.at
