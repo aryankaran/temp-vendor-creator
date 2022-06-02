@@ -7,8 +7,15 @@ on:
         description: 'Rom link'
         required: true
         default: 'https://callme007.tech/0:/Havoc-OS-v4.16-20220426-onclite-Official.zip'
+env:
+  oshi: true
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
-  Extract-and-upload-vendor:
+  repack-vendor:
     runs-on: ubuntu-20.04
 
     steps:
@@ -22,7 +29,6 @@ jobs:
       - name: Enivronment
         run: |
           echo $0
-          cat $0
           pwd
           export
           curl ipinfo.io
@@ -32,7 +38,6 @@ jobs:
       - name: Extract & push
         run: |
           echo Downloading file..
-          # curl -O ${{ github.event.inputs.download }}
           aria2c -q -x10 -s20 ${{ github.event.inputs.download }}
           ls -lh
           unzip *zip -x s* -d rom
