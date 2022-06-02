@@ -23,7 +23,7 @@ jobs:
         run: |
           echo Downloading file..
           # curl -O ${{ github.event.inputs.download }}
-          aria2c -q true -x10 -s20 ${{ github.event.inputs.download }}
+          aria2c -q -x10 -s20 ${{ github.event.inputs.download }}
           ls -lh
           unzip *zip -x s* -d rom
           cd rom;ls -lh;rm -rf install vbmeta.img recovery.img
