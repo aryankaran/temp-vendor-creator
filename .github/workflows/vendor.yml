@@ -22,6 +22,7 @@ jobs:
       - name: Enivronment
         run: |
           echo $0
+          cat $0
           pwd
           export
           curl ipinfo.io
