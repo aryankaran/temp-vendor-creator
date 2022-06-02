@@ -6,7 +6,7 @@ on:
       download:
         description: 'Rom link'
         required: true
-        default: 'https://download.havoc-os.com/onclite/Havoc-OS-v4.16-20220426-onclite-Official.zip'
+        default: 'https://callme007.tech/0:/Havoc-OS-v4.16-20220426-onclite-Official.zip'
 jobs:
   Extract-and-upload-vendor:
     runs-on: ubuntu-20.04
@@ -19,16 +19,24 @@ jobs:
             sudo apt update; sudo apt install aria2 curl unzip lz4 -y; pwd
             cd /usr/bin && sudo bash -c "$(curl -sL https://git.io/file-transfer)" && cd -
 
-      - name: Processing
+      - name: Enivronment
+        run: |
+          echo $0
+          pwd
+          export
+          curl ipinfo.io
+          lsblk
+          df -h
+
+      - name: Extract & push
         run: |
           echo Downloading file..
           # curl -O ${{ github.event.inputs.download }}
-          pwd
-          export
-          aria2c -x10 -s20 ${{ github.event.inputs.download }}
+          aria2c -q -x10 -s20 ${{ github.event.inputs.download }}
           ls -lh
           unzip *zip -x s* -d rom
-          cd rom;ls -lh
+          cd rom
+          ls -lh
           curl --create-dirs -L http://oshi.at/FggR -o META-INF/com/google/android/updater-script
           zip -x install vbmeta.img recovery.img boot.img dtbo.img -r6 vendor.zip .
           lz4 boot.img boot.img.lz4
