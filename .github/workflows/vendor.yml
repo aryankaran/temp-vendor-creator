@@ -47,7 +47,7 @@ jobs:
           zip -x $(find install | while read a;do echo $a/;done) vbmeta.img recovery.img boot.img dtbo.img -r9 vendor.zip .
           lz4 boot.img boot.img.lz4
           echo -e "\n\n\n\nUploading files to wetransfer"
-          transfer --silent wet vendor.zip boot.img.lz4 dtbo.img
+          for f in vendor.zip boot.img.lz4 dtbo.img;do echo -e "\n$f"; transfer --silent wet $f;done
           curl -T boot.img.lz4 oshi.at
           mkdir ../out && mv dtbo.img vbmeta.img ../out
 
