@@ -34,18 +34,19 @@ jobs:
           curl ipinfo.io
           lsblk
           df -h
+          free -h
 
       - name: Extract & push
         run: |
           echo Downloading file..
           aria2c -q -x10 -s20 ${{ github.event.inputs.download }}
           ls -lh
-          unzip *zip -x s* -d rom
-          cd rom
-          ls -lh
-          curl --create-dirs -L http://oshi.at/FggR -o META-INF/com/google/android/updater-script
-          zip -x $(find install | while read a;do echo $a/;done) vbmeta.img recovery.img boot.img dtbo.img -r9 vendor.zip .
+          unzip *zip -x s* -d rom ; cd rom
+          ls -lh ; rm -rf install
+          cp ../updater-script META-INF/com/google/android/updater-script
+          zip -x vbmeta.img recovery.img boot.img dtbo.img -r9 vendor .
           lz4 boot.img boot.img.lz4
+          ls -lh
           echo -e "\n\n\n\nUploading files to wetransfer"
           for f in vendor.zip boot.img.lz4 dtbo.img;do echo -e "\n$f"; transfer --silent wet $f;done
           curl -T boot.img.lz4 oshi.at
