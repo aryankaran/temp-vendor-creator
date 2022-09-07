@@ -6,7 +6,7 @@ on:
       download:
         description: 'Rom link'
         required: true
-        default: 'https://callme007.tech/0:/Havoc-OS-v4.16-20220426-onclite-Official.zip'
+        default: ''
 env:
   oshi: true
 
