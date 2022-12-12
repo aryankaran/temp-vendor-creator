@@ -40,9 +40,9 @@ jobs:
         run: |
           echo Downloading file..
           aria2c -q -x10 -s20 ${{ github.event.inputs.download }}
-          ls -lh; name=$(basename -s .zip *zip)
+          ls -lhog; name=$(basename -s .zip *zip)
           unzip "$name".zip -d rom ; cd rom
-          ls -lhg ; rm -rf install META-INF/com/android
+          ls -lhog ; rm -rf install META-INF/com/android
           cp ../updater-script META-INF/com/google/android/updater-script
           zip -x vbmeta.img recovery.img boot.img dtbo.img s* p* o* -r4 vendor-"$name".zip .
           lz4 boot.img kernel-"$name".img.lz4
