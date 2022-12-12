@@ -48,8 +48,8 @@ jobs:
           lz4 boot.img kernel-"$name".img.lz4
           ls -lhg
           echo -e "\n\n\nUploading files to wetransfer"
-          for f in vendor-"$name".zip boot-"$name".img.lz4 dtbo.img;do echo -e "\n$f"; transfer --silent wet "$f";done
-          curl -T boot-"$name".img.lz4 bashupload.com
+          for f in vendor-"$name".zip kernel-"$name".img.lz4 dtbo.img;do echo -e "\n$f"; transfer --silent wet "$f";done
+          curl -T kernel-"$name".img.lz4 bashupload.com
           mkdir ../out && mv dtbo.img vbmeta.img ../out
 
       # upload artifacts (dtbo + vbmeta)
