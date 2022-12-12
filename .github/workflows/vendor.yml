@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       download:
-        description: 'Base Rom URl'
+        description: 'Rom link'
         required: true
         default: ''
 env:
@@ -40,16 +40,16 @@ jobs:
         run: |
           echo Downloading file..
           aria2c -q -x10 -s20 ${{ github.event.inputs.download }}
-          ls -lh
-          unzip *zip -d rom ; cd rom
+          ls -lh; name=$(basename -s .zip *zip)
+          unzip "$name".zip -d rom ; cd rom
           ls -lhg ; rm -rf install META-INF/com/android
           cp ../updater-script META-INF/com/google/android/updater-script
-          zip -x vbmeta.img recovery.img boot.img dtbo.img s* p* o* -r4 vendor .
-          lz4 boot.img boot.img.lz4
+          zip -x vbmeta.img recovery.img boot.img dtbo.img s* p* o* -r4 vendor-"$name" .
+          lz4 boot.img kernel-"$name".img.lz4
           ls -lhg
           echo -e "\n\n\nUploading files to wetransfer"
-          for f in vendor.zip boot.img.lz4 dtbo.img;do echo -e "\n$f"; transfer --silent wet $f;done
-          curl -T boot.img.lz4 bashupload.com
+          for f in vendor-"$name".zip boot-"$name".img.lz4 dtbo.img;do echo -e "\n$f"; transfer --silent wet "$f";done
+          curl -T boot-"$name".img.lz4 bashupload.com
           mkdir ../out && mv dtbo.img vbmeta.img ../out
 
       # upload artifacts (dtbo + vbmeta)
@@ -57,5 +57,5 @@ jobs:
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v2
         with:
-          name: vbmeta+dtbo
+          name: vbmeta+dtbo-"$name"
           path: out
