@@ -57,5 +57,5 @@ jobs:
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v2
         with:
-          name: vbmeta+dtbo-"$name"
+          name: vbmeta+dtbo #-"$name"
           path: out
